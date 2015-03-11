@@ -112,6 +112,7 @@ template "#{node['haproxy']['conf_dir']}/haproxy.cfg" do
     :defaults_timeouts => haproxy_defaults_timeouts,
     backend_nodes: search(:node, "role:webserver").sort_by{ |n| n.name }
   )
+notifies :reload, 'service[haproxy]'
 end
 
 service "haproxy" do
