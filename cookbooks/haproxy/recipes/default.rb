@@ -105,9 +105,12 @@ template "#{node['haproxy']['conf_dir']}/haproxy.cfg" do
   group "root"
   mode 00644
   notifies :reload, "service[haproxy]"
+#  variables({
+#  })
   variables(
     :defaults_options => haproxy_defaults_options,
-    :defaults_timeouts => haproxy_defaults_timeouts
+    :defaults_timeouts => haproxy_defaults_timeouts,
+    backend_nodes: search(:node, "role:webserver").sort_by{ |n| n.name }
   )
 end
 
@@ -115,3 +118,4 @@ service "haproxy" do
   supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
 end
+
